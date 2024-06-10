@@ -5,39 +5,6 @@ import java.util.Scanner;
 public class Main {
     static final int SIZE = 8;
 
-
-    public static void main(String[] args) {
-        boolean[][] board = new boolean[SIZE][SIZE];
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Podaj pozycję pierwszego hetmana, na przykład A8");
-        ChessBoardTile firstQueenTile;
-
-        while(true) {
-            try {
-                firstQueenTile = ChessBoardTile.valueOf(scanner.nextLine().toUpperCase());
-
-                //ustawiamy pierwszego hetmana na danej pozycji
-                board[firstQueenTile.getRow()][firstQueenTile.getColumn()] = true;
-
-                break;
-
-            } catch (IllegalArgumentException ex) {
-                System.out.println("Podano nieprawidłową pozycję, spróbuj ponownie.");
-            }
-        }
-
-        boolean solutionFound = placeQueensE(SIZE, board, 0, firstQueenTile.getRow());
-
-        if(solutionFound) {
-            printSolution(firstQueenTile, board);
-
-        }else {
-            System.out.println("Nie znaleziono rozwiązania.");
-        }
-    }
-
-
     /**
      * Metoda znajdująca rozwiązanie problemu n hetmanów.
      *
@@ -47,7 +14,7 @@ public class Main {
      * @param firstQueenRow wiersz, w którym umieszczono pierwszego hetmana.
      * @return true, jeśli znaleziono rozwiązanie, false w przeciwnym wypadku.
      */
-    private static boolean placeQueensE(int n, boolean[][] board, int currentRow, int firstQueenRow) {
+    private static boolean placeQueens(int n, boolean[][] board, int currentRow, int firstQueenRow) {
 
         for (int i = 0; i < n; i++) {
             // Pomijamy wiersz, który ma być pominięty
@@ -55,18 +22,18 @@ public class Main {
                 if (currentRow == n - 1) {
                     return true;
                 }
-                return placeQueensE(n, board, currentRow + 1, firstQueenRow);
+                return placeQueens(n, board, currentRow + 1, firstQueenRow);
             }
 
             // Jeśli pole (currentRow, i) nie jest szachowane...
-            if (isSafeB(board, currentRow, i, n)) {
+            if (isSafe(board, currentRow, i, n)) {
                 board[currentRow][i] = true;
 
                 if (currentRow == n - 1) {
                     // Udało się dojść do końca i poprawnie rozstawić hetmany.
                     return true;
                 }
-                if (placeQueensE(n, board, currentRow + 1, firstQueenRow)) {
+                if (placeQueens(n, board, currentRow + 1, firstQueenRow)) {
                     return true;
                 } else {
                     board[currentRow][i] = false;
@@ -86,7 +53,7 @@ public class Main {
      * @param n długość boku szachownicy
      * @return true, jeśli podane pole nie jest szachowane, false w przeciwnym wypadku.
      */
-    private static boolean isSafeB(boolean[][] board, int row, int col, int n) {
+    private static boolean isSafe(boolean[][] board, int row, int col, int n) {
         //kolumna kolejno po polach w górę
         for (int i = 0; i < row; i++) {
             if (board[i][col]) {
@@ -154,6 +121,37 @@ public class Main {
                 }
             }
             System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        boolean[][] board = new boolean[SIZE][SIZE];
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Podaj pozycję pierwszego hetmana, na przykład A8");
+        ChessBoardTile firstQueenTile;
+
+        while(true) {
+            try {
+                firstQueenTile = ChessBoardTile.valueOf(scanner.nextLine().toUpperCase());
+
+                //ustawiamy pierwszego hetmana na danej pozycji
+                board[firstQueenTile.getRow()][firstQueenTile.getColumn()] = true;
+
+                break;
+
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Podano nieprawidłową pozycję, spróbuj ponownie.");
+            }
+        }
+
+        boolean solutionFound = placeQueens(SIZE, board, 0, firstQueenTile.getRow());
+
+        if(solutionFound) {
+            printSolution(firstQueenTile, board);
+
+        }else {
+            System.out.println("Nie znaleziono rozwiązania.");
         }
     }
 }
