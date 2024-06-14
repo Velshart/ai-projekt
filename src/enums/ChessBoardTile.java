@@ -26,6 +26,13 @@ public enum ChessBoardTile {
         return column;
     }
 
+    /**
+     * Zwraca oznaczenie pola znajdującego się w podanym w argumencie wierszu i kolumnie
+     *
+     * @param row wiersz pola, którego oznaczenie chcemy poznać
+     * @param column kolumna pola, którego oznaczenie chcemy poznać
+     * @return Obiekt ChessBoardTile zawierający oznaczenie pola zgodnie z oznaczeniami na szachownicy.
+     */
     public static ChessBoardTile fromCoordinates(int row, int column) {
         for (ChessBoardTile position : values()) {
             if (position.row == row && position.column == column) {

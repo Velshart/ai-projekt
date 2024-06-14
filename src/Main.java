@@ -17,11 +17,12 @@ public class Main {
     private static boolean placeQueens(int n, boolean[][] board, int currentRow, int firstQueenRow) {
 
         for (int i = 0; i < n; i++) {
-            // Pomijamy wiersz, który ma być pominięty
+
             if (currentRow == firstQueenRow) {
                 if (currentRow == n - 1) {
                     return true;
                 }
+                // Pomijamy wiersz, w którym znajduje się ustawiony przez użytkownika hetman.
                 return placeQueens(n, board, currentRow + 1, firstQueenRow);
             }
 
@@ -43,7 +44,6 @@ public class Main {
         // Jeśli po zakończeniu pętli nie udało się zwrócić true, oznacza to, że nie ma rozwiązania.
         return false;
     }
-
     /**
      * Sprawdza czy podane w argumencie pole jest w zasięgu ataku jakiegokolwiek hetmana na szachownicy.
      *
@@ -54,8 +54,15 @@ public class Main {
      * @return true, jeśli podane pole nie jest szachowane, false w przeciwnym wypadku.
      */
     private static boolean isSafe(boolean[][] board, int row, int col, int n) {
-        //kolumna kolejno po polach w górę
+        //kolumna kolejno do danego wiersza
         for (int i = 0; i < row; i++) {
+            if (board[i][col]) {
+                return false;
+            }
+        }
+
+        //kolumna kolejno od danego wiersza
+        for (int i = row + 1; i < n; i++) {
             if (board[i][col]) {
                 return false;
             }
@@ -71,13 +78,6 @@ public class Main {
         //prawa przekątna w górę
         for (int i = row, j = col; i >= 0 && j < n; i--, j++) {
             if (board[i][j]) {
-                return false;
-            }
-        }
-
-        //kolumna kolejno po polach w dół
-        for (int i = row + 1; i < n; i++) {
-            if (board[i][col]) {
                 return false;
             }
         }
